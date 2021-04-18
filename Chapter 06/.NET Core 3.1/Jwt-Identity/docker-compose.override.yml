@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+
+    sqldata:
+      #container_name: flixone-sqldata
+      environment:
+        - SA_PASSWORD=Pass@word
+        - ACCEPT_EULA=Y
+      ports:
+        - "5433:1433"
+      volumes:
+        - flixone-sqldata:/var/opt/mssql
+      
+    flixone.bookstore.userservice:
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ConnectionString="Server=sqldata;Database=FlixOne.BookStore.UsersDB;User Id=sa;Password=Pass@word"
+      ports:
+      - "9100:80"
+      
+#
+# [ volumes definition ]
+#
+# creates Docker volumes which can be mounted by other containers too
+#
+volumes:
+  flixone-sqldata:
+    driver: local
+
+#networks:
+#  default:
+#    external:
+#      name: nat
+#
